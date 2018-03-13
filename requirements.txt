@@ -49,3 +49,4 @@ wcwidth==0.1.7
 webencodings==0.5.1
 widgetsnbextension==3.0.8
 xgboost==0.6a2
+xlrd==1.1.0
