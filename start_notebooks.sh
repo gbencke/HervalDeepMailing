@@ -9,7 +9,7 @@ fi
 source env/bin/activate
 
 #Install the required python modules
-pip install -r requirements
+pip install -r requirements.txt
 
 #Start the jupyter lab...
 cd notebook
