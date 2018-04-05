@@ -1,3 +1,12 @@
+import os.path
+import logging
+from datetime import datetime
+import numpy as np
+import pandas as pd
+from sklearn.cluster import KMeans
+import matplotlib as mpl
+mpl.use('Agg')
+import matplotlib.pyplot as plt
 """
 <TODO>
 """
@@ -20,33 +29,19 @@
 
 # Importacao dos modulos necessarios
 
-import os.path
-import logging
-from datetime import datetime
-import numpy as np
-import pandas as pd
-from sklearn.cluster import KMeans
-import matplotlib as mpl
-mpl.use('Agg')
-import matplotlib.pyplot as plt
-
 
 def preparar_dados(log_location, arquivo_fonte, arquivo_saida, cluster_imagem):
     """
     <TODO>
     """
-    #log_location = "../../logs/"
-    #arquivo_fonte = "../../data/batch03/inputs/herval_final.xls"
-    #arquivo_saida = "../../data/batch03/intermediate/Herval.normalized.pickle"
-    #cluster_imagem = "../../data/batch03/intermediate/cluster.png"
+    def print_log(x):
+        """
+        <TODO>
+        """
+        logging.debug(x)
+        print(x)
 
-    pd.options.display.max_columns = 150
-    pd.set_option('display.height', 1000)
-    pd.set_option('display.max_rows', 5000)
-    pd.set_option('display.max_columns', 5000)
-    pd.set_option('display.width', 10000)
-    pd.set_option('display.expand_frame_repr', False)
-
+    print_log("Iniciando a carga de:{}".format(arquivo_fonte))
     # Configuracao do log a ser usado no processo e funcao para imprimir tanto na tela quanto no log abaixo
 
     logger = logging.getLogger()
@@ -56,13 +51,6 @@ def preparar_dados(log_location, arquivo_fonte, arquivo_saida, cluster_imagem):
                         level=logging.DEBUG,
                         filename=os.path.join(log_location, 'prepare_data.log.' +
                                               datetime.now().strftime("%Y%m%d%H%M%S.%f") + '.log'))
-
-    def print_log(x):
-        """
-        <TODO>
-        """
-        logging.debug(x)
-        print(x)
 
     # Funcao para limpar o dataframe de qualquer coluna desnecessario
 
@@ -118,19 +106,12 @@ def preparar_dados(log_location, arquivo_fonte, arquivo_saida, cluster_imagem):
     df_dtypes = {}
 
     # Le o excel passando  os tipos e conversores a serem usados em cada coluna
-
     pagantes = pd.read_excel(
         arquivo_fonte, dtype=df_dtypes, converters=converters)
-    print_log("CSV carregado, limpando colunas desnecessarias")
-    print_colunas(pagantes)
 
     # Limpamos o dataframe de colunas indesejadas
 
     pagantes = limpar_df(pagantes)
-    print_log("-------------------------------------------")
-    print_log("Colunas Remanescentes...")
-    print_log("-------------------------------------------")
-    print_colunas(pagantes)
 
     # Removendo todos os casos que CLIENTE_VALOR_DIVIDA e CONTRATO_ATRASO sao nulos (ou seja, np.nan) e apos resetando o indice interno
 
@@ -217,7 +198,8 @@ def preparar_dados(log_location, arquivo_fonte, arquivo_saida, cluster_imagem):
         min = 0
 
         df = RemoveOutliers(df, source_col, min, max)
-        print_log("({}) - Valores entre {} e {:.2f}".format(source_col, min, max))
+        print_log(
+            "({}) - Valores Proporcionais entre {} e {:.2f}".format(source_col, min, max))
 
         df['NORM_' + source_col] = df.apply(lambda row: 0 if row['NORM_' + source_col] == 0 else (
             (row['NORM_' + source_col] - min) / max), axis=1)
@@ -272,4 +254,4 @@ def preparar_dados(log_location, arquivo_fonte, arquivo_saida, cluster_imagem):
     pagantes = pagantes[colunas_para_processar]
     pagantes = pagantes.dropna(axis=0, how="any")
 
-    return pagantes
+    return pagantes, kmeans_pagantes
