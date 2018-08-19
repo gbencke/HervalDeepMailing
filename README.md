@@ -16,7 +16,7 @@ Desenvolver um metodo para que se possa apartir das caracteristicas do devedor, 
 
 ## Resultados
 
-###Dados relevantes para o pagamento: 
+### Dados relevantes para o pagamento: 
 
 Criamos diversas arvores de decisao, mas, basicamente as variaveis relevantes sao as seguintes
 
