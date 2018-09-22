@@ -11,6 +11,10 @@ source env/bin/activate
 #Install the required python modules
 pip install -r requirements.txt
 
-#Start the jupyter lab...
-cd notebook
-jupyter lab --ip='*' --port=8080 --no-browser
+export HERVAL_FROM_SOURCE=1
+export HERVAL_DATA_FOLDER='../'
+
+cd output.source
+
+python ./start_herval.py
+

@@ -1,0 +1,6 @@
+
+import herval_deep_mailing.HervalDeepMailingPrepacaoDados
+import herval_deep_mailing.HervalDeepMailingXGBoostSoDadosRelevantes
+import herval_deep_mailing.HervalDeepMailingXGBoostPredict
+
+print("Processo Concluido")
